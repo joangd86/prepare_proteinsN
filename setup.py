@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="prepare_proteins",
+    name="prepare_proteinsN",
     version="0.0.1",
     author="Martin Floor",
     author_email="martinfloor@gmail.com",

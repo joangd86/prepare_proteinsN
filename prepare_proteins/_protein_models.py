@@ -4613,7 +4613,8 @@ make sure of reading the target sequences with the function readTargetSequences(
         regional_best_fraction=0.2,
         constraint_level=1,
         restore_input_coordinates=False,
-        skip_connect_rewritting=False
+        skip_connect_rewritting=False,
+        nostrum=False
     ):
         """
         Generates a PELE calculation for extracted poses. The function reads all the
@@ -5218,6 +5219,11 @@ make sure of reading the target sequences with the function readTargetSequences(
 
             # Write input yaml
             with open(protein_ligand_folder + "/" + "input.yaml", "w") as iyf:
+                if nostrum != False:
+                        iyf.write('pele_exec: "/eb/x86_64/software/PELE/1.8.1/bin/PELE_mpi"\n')
+                        iyf.write('pele_data: "/eb/x86_64/software/PELE/1.8.1/Data"\n')
+                        iyf.write('pele_documents: "/eb/x86_64/software/PELE/1.8.1/Documents"\n')
+                        iyf.write('pele_license: "/shared/work/NBD_Utilities/PELE/licenses"\n')
                 if energy_by_residue or nonbonded_energy != None:
                     # Use new PELE version with implemented energy_by_residue
                     iyf.write('pele_exec: "/gpfs/projects/bsc72/PELE++/mnv/1.8.1b1/bin/PELE_mpi"\n')
@@ -5588,25 +5594,6 @@ make sure of reading the target sequences with the function readTargetSequences(
                     )
                     continuation = True
 
-                if constraint_level:
-                    # Copy script to add angles to pele.conf
-                    _copyScriptFile(
-                        pele_folder, "correctPositionalConstraints.py"
-                    )
-                    command += (
-                        "python "
-                        + rel_path_to_root
-                        + "._correctPositionalConstraints.py output "
-                    )
-                    command += (
-                        "output/input/"
-                        + protein_ligand
-                        + separator
-                        + pose
-                        + "_processed.pdb\n"
-                    )
-                    continuation = True
-
                 if energy_by_residue:
                     command += (
                         "python "
@@ -5614,8 +5601,8 @@ make sure of reading the target sequences with the function readTargetSequences(
                         + ebr_script_name
                         + " output --energy_type "
                         + energy_by_residue_type
-                        + "--new_version "
-                        + new_version
+                        + " --new_version "
+                        #+ new_version
                     )
                     if isinstance(ligand_energy_groups, dict):
                         command += (
@@ -5636,6 +5623,27 @@ make sure of reading the target sequences with the function readTargetSequences(
                         )
                     else:
                         command += "\n"
+
+                if constraint_level:
+                    # Copy script to add angles to pele.conf
+                    _copyScriptFile(
+                        pele_folder, "correctPositionalConstraints.py"
+                    )
+                    command += (
+                        "python "
+                        + rel_path_to_root
+                        + "._correctPositionalConstraints.py output "
+                    )
+                    command += (
+                        "output/input/"
+                        + protein_ligand
+                        + separator
+                        + pose
+                        + "_processed.pdb\n"
+                    )
+                    continuation = True
+
+                
 
                 if protein in membrane_residues:
                     command += (

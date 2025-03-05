@@ -4614,7 +4614,7 @@ make sure of reading the target sequences with the function readTargetSequences(
         constraint_level=1,
         restore_input_coordinates=False,
         skip_connect_rewritting=False,
-        nostrum=False
+        nostrum=True
     ):
         """
         Generates a PELE calculation for extracted poses. The function reads all the
@@ -4735,7 +4735,9 @@ make sure of reading the target sequences with the function readTargetSequences(
             Level of constraints applied during the simulation (0 for none, 1 for basic).
         restore_input_coordinates : bool, optional, default=False
             If True, restores the original coordinates after PELE processing (not working)
-
+        regional_combinations: never used, will not work because script regionalSpawning.py is not updated
+        regional_exclusions: never used, will not work because script regionalSpawning.py is not updated.
+        nostrum: default=True. To write in the yaml file the info of PELE. NOT NECESSARY, we can use prepare_proteins.
         Returns
         -------
         list
